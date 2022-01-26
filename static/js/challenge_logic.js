@@ -41,8 +41,8 @@ let dark = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?
 // Create a base layer that holds both maps.
 let baseMaps = {
   Street: streets,
-  Dark: dark,
   Satellite: satelliteStreets,
+  Dark: dark,
 };
 
 // Create the earthquake layer for our map.
@@ -67,7 +67,7 @@ let overlays = {
 let map = L.map('mapid', {
   center: [30, 30],
   zoom: 2,
-  layers: [streets, earthquakes]
+  layers: [streets, earthquakes, majorEarthquakes]
 });
 
 
@@ -234,38 +234,38 @@ d3.json(earthquakeData).then(function (data) {
       }
     }
 
-      // 6. Use the function that determines the radius of the earthquake marker based on its magnitude.
-      function getRadius(magnitude) {
-        if (magnitude === 0) {
-          return 1;
-        }
-        return magnitude * 4;
+    // 6. Use the function that determines the radius of the earthquake marker based on its magnitude.
+    function getRadius(magnitude) {
+      if (magnitude === 0) {
+        return 1;
       }
+      return magnitude * 4;
+    }
 
-      // 7. Creating a GeoJSON layer with the retrieved data that adds a circle to the map 
-      // sets the style of the circle, and displays the magnitude and location of the earthquake
-      //  after the marker has been created and styled.
-      L.geoJson(majorData, {
-        // We turn each feature into a circleMarker on the map.
+    // 7. Creating a GeoJSON layer with the retrieved data that adds a circle to the map 
+    // sets the style of the circle, and displays the magnitude and location of the earthquake
+    //  after the marker has been created and styled.
+    L.geoJson(majorData, {
+      // We turn each feature into a circleMarker on the map.
 
-        pointToLayer: function (feature, latlng) {
-          console.log(data);
-          return L.circleMarker(latlng);
-        },
-        // We set the style for each circleMarker using our styleInfo function.
-        style: styleInfo,
+      pointToLayer: function (feature, latlng) {
+        console.log(data);
+        return L.circleMarker(latlng);
+      },
+      // We set the style for each circleMarker using our styleInfo function.
+      style: styleInfo,
 
-        // We create a popup for each circleMarker to display the magnitude and
-        //  location of the earthquake after the marker has been created and styled.
-        onEachFeature: function (feature, layer) {
-          layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
-        }
-        // 8. Add the major earthquakes layer to the map.
-      }).addTo(majorEarthquakes);
+      // We create a popup for each circleMarker to display the magnitude and
+      //  location of the earthquake after the marker has been created and styled.
+      onEachFeature: function (feature, layer) {
+        layer.bindPopup("Magnitude: " + feature.properties.mag + "<br>Location: " + feature.properties.place);
+      }
+      // 8. Add the major earthquakes layer to the map.
+    }).addTo(majorEarthquakes);
 
-      // 9. Close the braces and parentheses for the major earthquake data.
+    // 9. Close the braces and parentheses for the major earthquake data.
 
-    });
+  });
 
 
 
